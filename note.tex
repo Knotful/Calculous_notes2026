@@ -1,0 +1,149 @@
+\documentclass[lang=cn,chinesefont=founder,10pt]{elegantbook}
+
+\title{数学分析选讲二笔记}
+
+\author{F.W.}
+\date{2026年9月9日}
+\cover{cover.jpg}
+
+\begin{document}
+\maketitle
+
+\frontmatter
+
+\chapter{引言}
+这是2026年秋季的数学分析选讲二课程的笔记，关于我为什么要写这个笔记，额……小孩子不懂事写着玩的（）。主要是记录该课程的上课内容与例题，以应对期末考试（大概）。而且本节目将由隔壁ZCode作为我们的sponsor（）。让我来玩一下嘛~当然，AI起辅助作用，文本的来源为我的笔记，我也会检查AI老师的识别的。
+
+\tableofcontents
+\mainmatter
+\chapter{第一周}
+\section{极限}
+老师曾言，其认为数学分析的核心，为极限二字，所以我们将从极限开始。
+\begin{definition}[数列的极限]
+    数列 $\{a_n\}$ 的极限定义为：
+    \[
+        \lim_{n \to \infty} a_n = a \quad \text{iff} \quad
+        \forall\, \varepsilon > 0,\; \exists\, N(\varepsilon) \in \mathbb{N} ,\;
+        \forall\, n > N(\varepsilon):\quad |a_n - a| < \varepsilon
+    \]
+\end{definition}
+
+\begin{remark}
+    等价地，也可取 $\varepsilon = \dfrac{1}{n}$，即 $|a_n - a| < \dfrac{1}{n}$。
+\end{remark}
+求极限通常有六种方法：（1）使用等价无穷小量；（2）Cauchy命题；（3）stolz定理；（4）重要极限；（5）L'Hopital法则；（6）夹逼准则。接下来我们将一一介绍：
+
+\begin{theorem}[常用等价无穷小量]
+    当$x$趋于$0$时，有：
+    \begin{align*}
+        \sin x &\sim x \\
+        \tan x &\sim x \\
+        \arcsin x &\sim x \\
+        \ln(1+x) &\sim x \\
+        e^x - 1 &\sim x \\
+        a^x - 1 &\sim x \ln a \quad (a>0,\ a\neq 1) \\
+        1 - \cos x &\sim \frac{1}{2}x^2 \\
+    \end{align*}
+\end{theorem}
+
+\begin{theorem}[Cauchy命题]
+    若 $\displaystyle\lim_{n \to \infty} x_n = l$，则
+    \[
+        \lim_{n \to \infty} \frac{\sum_{i=1}^{n} x_i}{n} = l
+    \]
+\end{theorem}
+
+\newpage
+
+\begin{theorem}[stolz定理]
+    \begin{enumerate}
+        \item $\dfrac{0}{0}$ 型
+
+        设 $a_n \to 0$，$b_n \to 0$，$\{a_n\}$ 严格单调。若
+        \[
+            \lim_{n \to \infty} \frac{b_{n+1} - b_n}{a_{n+1} - a_n} = L,
+        \]
+        则
+        \[
+            \lim_{n \to \infty} \frac{b_n}{a_n} = \lim_{n \to \infty} \frac{b_{n+1} - b_n}{a_{n+1} - a_n} = L.
+        \]
+        \item $\dfrac{*}{\infty}$ 型
+
+        设 $a_n \to +\infty$ 且 $\{a_n\}$ 严格递增。若
+        \[
+            \lim_{n \to \infty} \frac{b_{n+1} - b_n}{a_{n+1} - a_n} = L,
+        \]
+        则
+        \[
+            \lim_{n \to \infty} \frac{b_n}{a_n} = \lim_{n \to \infty} \frac{b_{n+1} - b_n}{a_{n+1} - a_n} = L.
+        \]
+    \end{enumerate}
+\end{theorem}
+
+\begin{theorem}[重要极限]
+    \[
+        \lim_{x \to 0} \frac{\sin x}{x} = 1 \qquad
+        \lim_{x \to 0} (1+x)^{\frac{1}{x}} = e
+    \]
+\end{theorem}
+
+\begin{theorem}[L'Hopital法则]
+    \begin{enumerate}
+        \item $\dfrac{0}{0}$ 型
+
+        设 $f$，$g$ 在 $x_0$ 的某去心邻域内可导，且 $g'(x) \neq 0$。若
+        \[
+            \lim_{x \to x_0} f(x) = \lim_{x \to x_0} g(x) = 0, \qquad
+            \lim_{x \to x_0} \frac{f'(x)}{g'(x)} = A,
+        \]
+        则
+        \[
+            \lim_{x \to x_0} \frac{f(x)}{g(x)} = \lim_{x \to x_0} \frac{f'(x)}{g'(x)} = A.
+        \]
+        \item $\dfrac{*}{\infty}$ 型
+
+        设 $f$，$g$ 在 $x_0$ 的某去心邻域内可导，$g'(x) \neq 0$，且 $\displaystyle\lim_{x \to x_0} g(x) = \infty$。若
+        \[
+            \lim_{x \to x_0} \frac{f'(x)}{g'(x)} = A,
+        \]
+        则
+        \[
+            \lim_{x \to x_0} \frac{f(x)}{g(x)} = \lim_{x \to x_0} \frac{f'(x)}{g'(x)} = A.
+        \]
+    \end{enumerate}
+    其中 $A$ 可为实数，也可为 $\infty$；极限过程 $x \to x_0$ 可替换为 $x \to x_0^{\pm}$，$x \to \infty$ 或 $x \to \pm\infty$，结论不变。
+\end{theorem}
+
+\begin{theorem}[夹逼准则]
+    若存在 $N \in \mathbb{N}$，当 $n > N$ 时有
+    \[
+        a_n \leq c_n \leq b_n,
+    \]
+    且 $\displaystyle\lim_{n \to \infty} a_n = \lim_{n \to \infty} b_n = A$，则
+    \[
+        \lim_{n \to \infty} c_n = A.
+    \]
+\end{theorem}
+
+\begin{remark}
+    函数版本同理：若在 $x_0$ 的某去心邻域内 $g(x) \leq f(x) \leq h(x)$，且 $\displaystyle\lim_{x \to x_0} g(x) = \displaystyle\lim_{x \to x_0} h(x) = A$，则 $\displaystyle\lim_{x \to x_0} f(x) = A$。
+\end{remark}
+
+下面我们介绍两个常用的不等式。
+
+\begin{theorem}[Bernoulli 不等式]
+    设 $h > -1$，$n \in \mathbb{N}$，则
+    \[
+        (1 + h)^n \geq 1 + nh,
+    \]
+    其中等号成立当且仅当 $ h = 0$。
+\end{theorem}
+
+\begin{theorem}[算术--几何平均不等式]
+    设 $a_1, \ldots, a_n \geq 0$，则
+    \[
+        \frac{\displaystyle\sum_{i=1}^{n} a_i}{n} \geq \left(\prod_{i=1}^{n} a_i\right)^{1/n}
+    \]
+    其中等号成立当且仅当 $ a_1 = \cdots = a_n$。
+\end{theorem}
+\end{document}
