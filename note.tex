@@ -6,6 +6,12 @@
 \date{2026年9月9日}
 \cover{cover.jpg}
 
+% 重定义 proof：模板原版不接受可选参数且标题与正文同行；现标题单独成行，默认显示“证明”，传 [解] 则显示“解”
+\renewenvironment{proof}[1][\proofname]{
+  \par\noindent\textbf{\color{second}#1\;}\par\noindent
+  \color{black!90}\cfs}{
+  \par}
+
 \begin{document}
 \maketitle
 
@@ -13,6 +19,8 @@
 
 \chapter{引言}
 这是2026年秋季的数学分析选讲二课程的笔记，关于我为什么要写这个笔记，额……小孩子不懂事写着玩的（）。主要是记录该课程的上课内容与例题，以应对期末考试（大概）。而且本节目将由隔壁ZCode作为我们的sponsor（）。让我来玩一下嘛~当然，AI起辅助作用，文本的来源为我的笔记，我也会检查AI老师的识别的。
+
+还有从第三周换了老师开时我就过上了听不懂课的生活，于是从此以后笔记基本就变成了正大光明的抄书（大概）。
 
 \tableofcontents
 \mainmatter
@@ -147,5 +155,392 @@
     其中等号成立当且仅当 $ a_1 = \cdots = a_n$。
 \end{theorem}
 
+\begin{example}
+    求 $\displaystyle\lim_{n \to \infty} \frac{\ln n!}{n}$。
+\end{example}
+
+\begin{proof}[解]
+    \textbf{法一}（Stolz 公式）：
+    \[
+        \lim_{n \to \infty} \frac{\ln(n+1)! - \ln n!}{(n+1) - n}
+        = \lim_{n \to \infty} \frac{\ln(n+1)}{1}
+        = +\infty.
+    \]
+
+    \textbf{法二}：
+    \[
+        \lim_{n \to \infty} \frac{\ln n!}{n}
+        = \lim_{x \to \infty} \frac{\ln \Gamma(x+1)}{x}
+        \stackrel{L}{=} \lim_{x \to \infty} \frac{\Gamma'(x+1)}{\Gamma(x+1)}
+        = \lim_{n \to \infty} \frac{\Gamma'(n)}{\Gamma(n)}
+        \stackrel{\triangle}{=} \lim_{n \to \infty} \psi(n).
+    \]
+    由 $\psi(1) = -\gamma$，
+    \[
+        \psi(n) - \psi(1) = -\sum_{k=0}^{+\infty} \left(\frac{1}{n+k} - \frac{1}{k+1}\right),
+    \]
+    \[
+        \psi(n) = 1 + \frac{1}{2} + \frac{1}{3} + \cdots + \frac{1}{n-1} + \psi(1),
+    \]
+    故 $\displaystyle\lim_{n \to \infty} \psi(n) = +\infty$。
+\end{proof}
+
+\begin{remark}
+    有人为了这点醋包了一盘饺子（）。
+\end{remark}
+
+\begin{example}
+    求 $\displaystyle\lim_{n \to \infty} \frac{n^5}{2^n}$。
+\end{example}
+
+\begin{proof}[解]
+    \[
+        \lim_{n \to \infty} \frac{\ln n^5}{2^n}
+        = \lim_{x \to \infty} \frac{x^5}{2^x}
+        \stackrel{L}{=} \cdots = 0.
+    \]
+\end{proof}
+
+\begin{example}
+    求 $\displaystyle\lim_{n \to \infty} \frac{1^p + 2^p + \cdots + n^p}{n^{p+1}}$，其中 $p > 0$。
+\end{example}
+
+\begin{proof}[解]
+    \textbf{法一}：由 Stolz 定理，
+    \[
+        \lim_{n \to \infty} \frac{(1^p + 2^p + \cdots + n^p + (n+1)^p) - (1^p + 2^p + \cdots + n^p)}{(n+1)^{p+1} - n^{p+1}}
+        = \lim_{n \to \infty} \frac{(n+1)^p}{(n+1)^{p+1} - n^{p+1}}.
+    \]
+    \[
+        = \lim_{n \to \infty} \frac{n^p + C_p^1 n^{p-1} + \cdots + 1}{C_{p+1}^1 n^p + C_{p+1}^2 n^{p-1} + \cdots + 1}
+        = \frac{1}{C_{p+1}^1}
+        = \frac{1}{p+1}.
+    \]
+
+    \textbf{法二}：由 Stolz 定理，
+    \[
+        \lim_{n \to \infty} x
+        = \lim_{n \to \infty} \frac{(n+1)^p}{(n+1)^{p+1} - n^{p+1}}
+        = \lim_{n \to \infty} \frac{\left(1 + \frac{1}{n}\right)^p}{\left(\left(1 + \frac{1}{n}\right)^{p+1} - 1\right) n}
+        = \lim_{n \to \infty} \frac{1 + \frac{p}{n}}{n \left(\frac{p+1}{n}\right)}
+        = \frac{1}{p+1}.
+    \]
+
+    \textbf{法三}：
+    \[
+        \lim_{n \to \infty} \frac{1^p + 2^p + \cdots + n^p}{n^{p+1}}
+        = \lim_{n \to \infty} \frac{1}{n} \sum_{i=1}^{n} \left(\frac{i}{n}\right)^p
+        = \int_0^1 x^p \, dx
+        = \frac{1}{p+1}.
+    \]
+\end{proof}
+
+\begin{remark}
+    注：(1) Stolz 定理；(2) 积分求极限。
+\end{remark}
+
+\begin{example}
+    设 $x_1 \in (0,1)$，$x_{n+1} = x_n(1-x_n)$，$\forall n \in \mathbb{N}$。求 $\displaystyle\lim_{n \to \infty} \frac{1}{n}\left(\frac{1}{x_n} - 1\right)$。
+\end{example}
+
+\begin{proof}[解]
+    $x_1 \in (0,1) \Rightarrow x_2 = x_1(1-x_1) \in (0,1)$，由数学归纳法知 $\forall n$，$x_n \in (0,1)$。
+    又 $x_{n+1} = x_n(1-x_n) = x_n - x_n^2 < x_n$，故 $\{x_n\}$ 单调递减。
+    故 $\lim_{n \to \infty} x_n$ 存在，令 $n \to \infty$，有 $\lim_{n \to \infty} x_n = \left(\lim_{n \to \infty} x_n\right)\left(1 - \lim_{n \to \infty} x_n\right)$，解得 $\lim_{n \to \infty} x_n = 0$。
+    利用 Stolz，
+    \[
+        \lim_{n \to \infty} \frac{1}{n}\left(\frac{1}{x_n} - 1\right)
+        = \lim_{n \to \infty} \frac{\left(\frac{1}{x_{n+1}} - 1\right) - \left(\frac{1}{x_n} - 1\right)}{(n+1) - (n)}
+        = \lim_{n \to \infty} \frac{x_n - x_{n+1}}{x_{n+1}x_n}
+        = \lim_{n \to \infty} \frac{x_n^2}{x_n^2(1-x_n)}
+        = \lim_{n \to \infty} \frac{1}{1-x_n}
+        = 1.
+    \]
+\end{proof}
+
+\begin{example}
+    求 $\displaystyle\lim_{n \to \infty} \frac{1}{n}\sum_{i=1}^{n}\sqrt{n+i}$。
+\end{example}
+
+\begin{proof}[解]
+    \textbf{法一}：
+    \[
+        L = \lim_{n \to \infty} \sqrt{n}\cdot\frac{1}{n}\sum_{i=1}^{n}\sqrt{1+\frac{i}{n}}.
+    \]
+    由 $\displaystyle\lim_{n \to \infty} \frac{1}{n}\sum_{i=1}^{n}\sqrt{1+\frac{i}{n}} = \int_0^1 \sqrt{1+x}\,dx < +\infty \Rightarrow$ 当 $n$ 充分大时，$\frac{1}{n}\sum_{i=1}^{n}\sqrt{1+\frac{i}{n}}$ 有界；
+    又 $\lim_{n \to \infty} \sqrt{n} = +\infty$，故 $L = +\infty$。
+
+    \textbf{法二}：由 Stolz 定理，
+    \[
+        L = \lim_{n \to \infty} \frac{\left(\sqrt{n+2} + \cdots + \sqrt{2n+2}\right) - \left(\sqrt{n+1} + \cdots + \sqrt{2n}\right)}{(n+1) - n}
+        = \lim_{n \to \infty} \left(\sqrt{2n+1} + \sqrt{2n+2} - \sqrt{n+1}\right)
+    \]
+    \[
+        = \lim_{n \to \infty} \sqrt{n}\left(\sqrt{2+\frac{1}{n}} + \sqrt{2+\frac{2}{n}} - \sqrt{1+\frac{1}{n}}\right) = +\infty,
+    \]
+    其中括号内趋于 $2\sqrt{2}-1 > 0$（有界），左边 $\sqrt{n}$ 趋于 $+\infty$。
+\end{proof}
+
+\begin{remark}
+    注：法一为一个积分，法二为一个 Stolz。
+\end{remark}
+
+\begin{example}
+    求 $\displaystyle\lim_{n \to \infty} \frac{1}{\sqrt{n}}\sum_{i=1}^{n}\frac{1}{\sqrt{i}}$。
+\end{example}
+
+\begin{proof}[解]
+    \textbf{法一}（定积分定义）：
+    \[
+        L = \lim_{n \to \infty} \frac{1}{n}\sum_{i=1}^{n}\frac{1}{\sqrt{\frac{i}{n}}}
+        = \int_0^1 \frac{1}{\sqrt{x}}\,dx
+        = \left.2x^{\frac{1}{2}}\right|_0^1
+        = 2.
+    \]
+
+    \textbf{法二}（Stolz）：
+    \[
+        L = \lim_{n \to \infty} \frac{\frac{1}{\sqrt{n+1}}}{\sqrt{n+1} - \sqrt{n}}
+        = \lim_{n \to \infty} \frac{1}{(n+1) - \sqrt{n(n+1)}}
+        = \lim_{n \to \infty} \frac{(n+1) + \sqrt{n(n+1)}}{(n+1)^2 - n(n+1)}
+        = \lim_{n \to \infty} \left(1 + \sqrt{\frac{n}{n+1}}\right)
+        = 2.
+    \]
+\end{proof}
+
+\begin{example}
+    设 $\displaystyle\lim_{n \to \infty} a_n = a > 0$，$\forall n,\ a_n > 0$。求 $\displaystyle\lim_{n \to \infty} a_n^{\frac{1}{n}}$。
+\end{example}
+
+\begin{proof}[解]
+    记 $L_n = a_n^{\frac{1}{n}}$，则 $\ln L_n = \frac{1}{n}\ln a_n$。由 Stolz，
+    \[
+        \lim_{n \to \infty} \frac{\ln a_n}{n}
+        = \lim_{n \to \infty} \frac{\ln a_{n+1} - \ln a_n}{(n+1) - n}
+        = 0,
+    \]
+    故 $\lim_{n \to \infty} L_n = e^0 = 1$。
+\end{proof}
+
+\begin{remark}
+    注：$\lim_{n \to \infty} a_n = a > 0 \Rightarrow \ln a_n$ 有界。
+\end{remark}
+
+\begin{example}
+    求 $\displaystyle\lim_{n \to \infty} \left(\frac{1}{\sqrt{n^2+1}} + \cdots + \frac{1}{\sqrt{n^2+n}}\right)$。
+\end{example}
+
+\begin{proof}[解]
+    \textbf{法一}（夹逼准则）：
+    \[
+        \frac{n}{\sqrt{n^2+n}} \leq \frac{1}{\sqrt{n^2+1}} + \cdots + \frac{1}{\sqrt{n^2+n}} \leq \frac{n}{\sqrt{n^2+1}},
+    \]
+    两边都趋于 $1$，用夹逼准则可有极限 $= 1$。
+
+    \textbf{法二}：注意
+    \[
+        \lim_{n \to \infty} \sum_{i=1}^{n}\frac{1}{\sqrt{n^2+i}}
+        = \lim_{n \to \infty} \frac{1}{n}\sum_{i=1}^{n}\frac{1}{\sqrt{1+\frac{i}{n^2}}},
+    \]
+    被积式依赖于 $n$，不能直接化成 Riemann 积分。我们可以这样来看：固定 $n$，
+    \[
+        \int_0^1 \frac{dx}{\sqrt{1+\frac{x}{n}}}
+        = \lim_{k \to \infty} \frac{1}{k}\sum_{i=1}^{k}\frac{1}{\sqrt{1+\frac{i}{nk}}},
+    \]
+    收敛，则其任何子列也收敛。那么
+    \[
+        \lim_{n \to \infty} \int_0^1 \frac{dx}{\sqrt{1+\frac{x}{n}}}
+        = \lim_{n \to \infty} \left(\lim_{k \to \infty} \frac{1}{k}\sum_{i=1}^{k}\frac{1}{\sqrt{1+\frac{i}{nk}}}\right)
+        \xrightarrow{\text{取子列 } k=n} \lim_{n \to \infty} \frac{1}{n}\sum_{i=1}^{n}\frac{1}{\sqrt{1+\frac{i}{n^2}}}
+        = \text{L.H.S.}
+    \]
+    于是上式 $= \displaystyle\lim_{n \to \infty} \int_0^1 \frac{dx}{\sqrt{1+\frac{x}{n}}} \stackrel{\mathrm{DCT}}{=} \int_0^1 \lim_{n \to \infty} \frac{dx}{\sqrt{1+\frac{x}{n}}} = \int_0^1 dx = 1$。
+\end{proof}
+
+\begin{example}
+    求 $\displaystyle\lim_{x \to 0} \frac{e^{x^2} - \cos x}{x^2}$。
+\end{example}
+
+\begin{proof}[解]
+    \[
+        \lim_{x \to 0} \frac{e^{x^2} - \cos x}{x^2}
+        \stackrel{L}{=} \lim_{x \to 0} \frac{2xe^{x^2} + \sin x}{2x}
+        \stackrel{L}{=} \lim_{x \to 0} \frac{2e^{x^2} + 4x^2e^{x^2} + \cos x}{2}
+        = \frac{2+1}{2}
+        = \frac{3}{2}.
+    \]
+\end{proof}
+
+\begin{example}
+    求 $\displaystyle\lim_{n \to \infty} \frac{1}{n}\sqrt[n]{n(n+1)\cdots(2n-1)}$。
+\end{example}
+
+\begin{proof}[解]
+    \[
+        \lim_{n \to \infty} \frac{1}{n}\sqrt[n]{n(n+1)\cdots(2n-1)}
+        = \lim_{n \to \infty} \sqrt[n]{\left(1+\frac{1}{n}\right)\left(1+\frac{2}{n}\right)\cdots\left(1+\frac{n-1}{n}\right)}.
+    \]
+    记 $\ln L_n = \dfrac{\sum_{i=1}^{n-1}\ln\left(1+\frac{i}{n}\right)}{n}$，则
+    \[
+        \lim_{n \to \infty} \ln L_n = \int_0^1 \ln(1+x)\,dx = 2\ln 2 - 1,
+    \]
+    故 $\lim_{n \to \infty} L_n = e^{2\ln 2 - 1}$。
+\end{proof}
+
+\begin{example}
+    求 $\displaystyle\lim_{x \to \infty} \frac{x}{\sqrt{1+x^2}}$。
+\end{example}
+
+\begin{proof}[解]
+    此极限为 $\frac{\infty}{\infty}$ 型，但用 L'Hopital 法则会循环回原式（$\frac{x}{\sqrt{1+x^2}} \to \frac{\sqrt{1+x^2}}{x} \to \cdots$），法则失效；直接计算：
+    \[
+        \lim_{x \to \infty} \frac{x}{\sqrt{1+x^2}}
+        = \lim_{x \to \infty} \frac{1}{\sqrt{\frac{1}{x^2}+1}}
+        = 1.
+    \]
+\end{proof}
+
+\begin{example}
+    求 $\displaystyle\lim_{x \to 0} \frac{\int_0^{x^2}\sin t\,dt}{x^4}$。
+\end{example}
+
+\begin{proof}[解]
+    \[
+        \lim_{x \to 0} \frac{\int_0^{x^2}\sin t\,dt}{x^4}
+        \stackrel{L}{=} \lim_{x \to 0} \frac{\sin x^2\cdot 2x}{4x^3}
+        = \frac{1}{2}.
+    \]
+\end{proof}
+
+\begin{remark}
+    注：（变限积分求导）$\dfrac{d}{dx}\displaystyle\int_{v(x)}^{u(x)} f(t)\,dt = f(u(x))u'(x) - f(v(x))v'(x)$。
+\end{remark}
+
+\begin{example}
+    设 $\displaystyle\lim_{x \to +\infty} f'(x) = k$。证明 $\displaystyle\lim_{x \to \infty} \frac{f(x)}{x} = k$。
+\end{example}
+
+\begin{proof}
+    由 L'Hopital 法则（$\frac{*}{\infty}$ 型），
+    \[
+        \lim_{x \to \infty} \frac{f(x)}{x} = \lim_{x \to \infty} \frac{f'(x)}{1} = k.
+    \]
+\end{proof}
+
+\begin{remark}
+    注：反之不成立。$\displaystyle\lim_{x \to \infty} \frac{x+\sin x}{x} = 1$，但 $\lim_{x \to \infty} (x+\sin x)' = \lim_{x \to \infty}(1+\cos x)$ 不存在。
+\end{remark}
+
+\begin{example}
+    设 $f(x)$ 在 $x=0$ 处二阶可导且 $f(0)=0$，$f'(0)=1$，$f''(0)=2$。求 $\displaystyle\lim_{x \to 0}\frac{f(x)-x}{x^2}$。
+\end{example}
+
+\begin{proof}[解]
+    \textbf{法一}：
+    \[
+        \lim_{x \to 0} \frac{f(x)-x}{x^2}
+        \stackrel{L}{=} \lim_{x \to 0} \frac{f'(x)-1}{2x}
+        \stackrel{L}{=} \lim_{x \to 0} \frac{f''(x)}{2}
+        = 1.
+    \]
+
+    \textbf{法二}（Taylor 展开）：
+    \[
+        \lim_{x \to 0} \frac{f(x)-x}{x^2}
+        = \lim_{x \to 0} \frac{f(0) + f'(0)x + \frac{f''(0)}{2}x^2 + o(x^2) - x}{x^2}
+        = \lim_{x \to 0} \frac{x + x^2 + o(x^2) - x}{x^2}
+        = 1.
+    \]
+\end{proof}
+
+% 注：法一连用两次 L'Hopital，但题设只保证 f''(0) 存在（未保证邻域内存在），第二次使用不严谨；法二严谨。
+
+\begin{example}
+    设 $f(x)$ 在 $(a,+\infty)$ 可导，且 $\displaystyle\lim_{x \to +\infty} (f(x)+f'(x)) = A$。证明 $\displaystyle\lim_{x \to +\infty} f(x) = A$，$\displaystyle\lim_{x \to +\infty} f'(x) = 0$。
+\end{example}
+
+\begin{proof}
+    由 $\frac{d}{dx}\left(e^x f(x)\right) = e^x f(x) + e^x f'(x)$，
+    \[
+        \lim_{x \to +\infty} f(x)
+        = \lim_{x \to +\infty} \frac{e^x f(x)}{e^x}
+        \stackrel{L}{=} \lim_{x \to +\infty} \frac{e^x f(x) + e^x f'(x)}{e^x}
+        = \lim_{x \to +\infty} (f(x)+f'(x))
+        = A.
+    \]
+    于是 $\lim_{x \to +\infty} f'(x) = 0$。
+\end{proof}
+
+\begin{example}
+    设 $f(x)$ 在 $(a,+\infty)$ 上可微，且 $\displaystyle\lim_{x \to +\infty} \left(f(x)+\frac{1}{\alpha}f'(x)\right) = A$，$\alpha > 0$。求 $\displaystyle\lim_{x \to +\infty} f(x)$ 与 $\displaystyle\lim_{x \to +\infty} f'(x)$。
+\end{example}
+
+\begin{proof}[解]
+    \[
+        \frac{d}{dx}\left(e^{\alpha x}f(x)\right)
+        = \alpha e^{\alpha x}f(x) + e^{\alpha x}f'(x)
+        = \alpha e^{\alpha x}\left(f(x)+\frac{1}{\alpha}f'(x)\right),
+    \]
+    故
+    \[
+        \lim_{x \to +\infty} f(x)
+        = \lim_{x \to +\infty} \frac{e^{\alpha x}f(x)}{e^{\alpha x}}
+        \stackrel{L}{=} \lim_{x \to +\infty} \frac{\alpha e^{\alpha x}\left(f(x)+\frac{1}{\alpha}f'(x)\right)}{\alpha e^{\alpha x}}
+        = A,
+    \]
+    于是 $\lim_{x \to +\infty} f'(x) = 0$。
+\end{proof}
+
+\begin{remark}
+    如何想到 $\frac{d}{dx}(e^{\alpha x}f(x)) = \alpha e^{\alpha x}\left(f(x)+\frac{1}{\alpha}f'(x)\right)$？
+    
+    设 $u(x)\left(f(x)+\frac{1}{\alpha}f'(x)\right) = u(x)f + \frac{u(x)}{\alpha}f'$ 为全微分，
+    i.e. $u(x)f\,dx + \frac{u(x)}{\alpha}\,df$ 为全微分，则
+    \[
+        \frac{\partial(u(x)f)}{\partial f} = \frac{\partial\left(\frac{u(x)}{\alpha}\right)}{\partial x},
+    \]
+    即 $u(x) = \dfrac{du}{dx}\cdot\dfrac{1}{\alpha}$，即 $\alpha\,dx = \dfrac{du}{u}$，积分得 $\alpha x = \ln u$，$u = e^{\alpha x}\cdot e^c$，取 $c = 0$ 即可。
+    
+    于是 $e^{\alpha x}\left(f(x)\,dx + \frac{1}{\alpha}\,df\right) = d\left(\frac{1}{\alpha}e^{\alpha x}f(x)\right)$。
+\end{remark}
+
+\begin{example}
+    设 $f(x)$ 在 $(a,+\infty)$ 上可微，$\displaystyle\lim_{x \to +\infty}\left(f(x)+\frac{x}{2}f'(x)\right) = A$。求 $\displaystyle\lim_{x \to +\infty} f(x)$ 与 $\displaystyle\lim_{x \to +\infty} f'(x)$。
+\end{example}
+
+\begin{proof}[解]
+    \[
+        \frac{d}{dx}\left(x^2 f(x)\right)
+        = 2x f(x) + x^2 f'(x)
+        = 2x\left(f(x)+\frac{x}{2}f'(x)\right),
+    \]
+    故
+    \[
+        \lim_{x \to +\infty} f(x)
+        = \lim_{x \to +\infty} \frac{x^2 f(x)}{x^2}
+        \stackrel{L}{=} \lim_{x \to +\infty} \frac{2x\left(f(x)+\frac{x}{2}f'(x)\right)}{2x}
+        = A,
+    \]
+    于是 $\lim_{x \to +\infty} f'(x) = 0$。
+\end{proof}
+
+\begin{example}
+    设 $f(x)$ 在 $(0,+\infty)$ 可微，$\displaystyle\lim_{x \to 0^+} (f(x)-xf'(x)) = A$。求 $\displaystyle\lim_{x \to 0^+} f(x)$，$\displaystyle\lim_{x \to 0^+} xf'(x)$。
+\end{example}
+
+\begin{proof}[解]
+    由 $\dfrac{d\left(\frac{f(x)}{x}\right)}{dx} = -\dfrac{f(x)-xf'(x)}{x^2}$，
+    \[
+        \lim_{x \to 0^+} f(x)
+        = \lim_{x \to 0^+} \frac{\frac{f(x)}{x}}{\frac{1}{x}}
+        \stackrel{L}{=} \lim_{x \to 0^+} \frac{-\frac{1}{x^2}(f(x)-xf'(x))}{-\frac{1}{x^2}}
+        = A,
+    \]
+    $\Rightarrow \lim_{x \to 0^+} xf'(x) = 0$。
+\end{proof}
+
+\begin{remark}
+    注：$\lim_{x \to 0^+} f'(x)$ 不一定存在！
+\end{remark}
 
 \end{document}
